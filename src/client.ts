@@ -11,13 +11,10 @@ const api = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:5000" }), // Replace '/api' with your API base URL
   endpoints: (builder) => ({
     getAnswer: builder.query<Answer, void>({
-      query: () => "/stream",
-      async onCacheEntryAdded(
-        arg,
-        { updateCachedData, cacheDataLoaded }
-      ) {
-        const { data } = await cacheDataLoaded;
-        await fetchEventSource(`http://localhost:5000/sse/${data.messageId}`, {
+      queryFn: () => ({ data: { data: "", messageId: "" } }),
+      async onCacheEntryAdded(arg, { updateCachedData, cacheDataLoaded }) {
+        await cacheDataLoaded;
+        await fetchEventSource(`http://localhost:5000/sse/`, {
           method: "POST",
           headers: {
             Accept: "text/event-stream",

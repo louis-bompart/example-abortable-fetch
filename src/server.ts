@@ -6,18 +6,7 @@ app.use(cors());
 
 const PORT = 5000;
 
-const startedStream = new Set();
-
-app.get("/stream", (_, res) => {
-  const messageId = crypto.randomUUID();
-  startedStream.add(messageId);
-  return res.status(200).json({ messageId });
-});
-
-app.post("/sse/:messageId", function (req, res) {
-  if (!startedStream.delete(req.params.messageId)) {
-    return res.status(404).json({ message: "Stream not found" });
-  }
+app.post("/sse/", function (req, res) {
   res.setHeader("Cache-Control", "no-cache");
   res.setHeader("Content-Type", "text/event-stream");
   res.setHeader("Access-Control-Allow-Origin", "*");
