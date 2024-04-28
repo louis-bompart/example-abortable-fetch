@@ -1,0 +1,45 @@
+diff --git a/node_modules/@microsoft/fetch-event-source/lib/cjs/fetch.js b/node_modules/@microsoft/fetch-event-source/lib/cjs/fetch.js
+index cdffc0e..ba91912 100644
+--- a/node_modules/@microsoft/fetch-event-source/lib/cjs/fetch.js
++++ b/node_modules/@microsoft/fetch-event-source/lib/cjs/fetch.js
+@@ -24,27 +24,17 @@ function fetchEventSource(input, _a) {
+             headers.accept = exports.EventStreamContentType;
+         }
+         let curRequestController;
+-        function onVisibilityChange() {
+-            curRequestController.abort();
+-            if (!document.hidden) {
+-                create();
+-            }
+-        }
+-        if (!openWhenHidden) {
+-            document.addEventListener('visibilitychange', onVisibilityChange);
+-        }
+         let retryInterval = DefaultRetryInterval;
+         let retryTimer = 0;
+         function dispose() {
+-            document.removeEventListener('visibilitychange', onVisibilityChange);
+-            window.clearTimeout(retryTimer);
++            clearTimeout(retryTimer);
+             curRequestController.abort();
+         }
+         inputSignal === null || inputSignal === void 0 ? void 0 : inputSignal.addEventListener('abort', () => {
+             dispose();
+             resolve();
+         });
+-        const fetch = inputFetch !== null && inputFetch !== void 0 ? inputFetch : window.fetch;
++        const fetch = inputFetch !== null && inputFetch !== void 0 ? inputFetch : globalThis.fetch;
+         const onopen = inputOnOpen !== null && inputOnOpen !== void 0 ? inputOnOpen : defaultOnOpen;
+         async function create() {
+             var _a;
+@@ -70,8 +60,8 @@ function fetchEventSource(input, _a) {
+                 if (!curRequestController.signal.aborted) {
+                     try {
+                         const interval = (_a = onerror === null || onerror === void 0 ? void 0 : onerror(err)) !== null && _a !== void 0 ? _a : retryInterval;
+-                        window.clearTimeout(retryTimer);
+-                        retryTimer = window.setTimeout(create, interval);
++                        clearTimeout(retryTimer);
++                        retryTimer = setTimeout(create, interval);
+                     }
+                     catch (innerErr) {
+                         dispose();

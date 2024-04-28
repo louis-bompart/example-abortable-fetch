@@ -1,22 +1,29 @@
 {
   "name": "abortable-fetch",
+  "private": true,
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "npm run build:noshim && npm run build:shim",
-    "build:noshim": "esbuild --bundle ./index.js > without-shim.js",
-    "build:shim": "esbuild --inject:./shim.js --bundle ./index.js > with-shim.js"
+    "start": "node dist/index.js",
+    "prestart": "npm run build",
+    "build": "tsc",
+    "postinstall": "patch-package"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@microsoft/fetch-event-source": "^2.0.1",
-    "abortcontroller-polyfill": "^1.7.5",
+    "@reduxjs/toolkit": "^2.2.3",
     "cors": "^2.8.5",
     "esbuild": "^0.20.2",
     "express": "^4.19.2"
   },
-  "type": "module"
+  "type": "module",
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "patch-package": "^8.0.0",
+    "typescript": "^5.4.5"
+  }
 }

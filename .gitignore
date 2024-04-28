@@ -2,3 +2,4 @@ node_modules
 with-shim.js
 without-shim.js
 .DS_Store
+dist
