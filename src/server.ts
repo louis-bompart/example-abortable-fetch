@@ -1,8 +1,10 @@
 import express from "express";
 import cors from "cors";
+import { RequestPayload } from "./common/request-payload.js";
 
 const app = express();
 app.use(cors());
+app.use(express.json());
 
 const PORT = 5000;
 
@@ -13,10 +15,11 @@ app.post("/sse/", function (req, res) {
   res.setHeader("Connection", "keep-alive");
   res.flushHeaders(); // flush the headers to establish SSE with client
 
-  let counter = 0;
+  let { initialCount: counter, targetCount } = req.body;
+
   let interValID = setInterval(() => {
     counter++;
-    if (counter >= 10) {
+    if (counter >= targetCount) {
       clearInterval(interValID);
       res.end(); // terminates SSE session
       return;
