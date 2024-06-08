@@ -1,6 +1,6 @@
 import express from "express";
 import cors from "cors";
-import { RequestPayload } from "./common/request-payload.js";
+import { RequestPayload } from "../common/request-payload.js";
 
 const app = express();
 app.use(cors());
@@ -15,7 +15,7 @@ app.post("/sse/", function (req, res) {
   res.setHeader("Connection", "keep-alive");
   res.flushHeaders(); // flush the headers to establish SSE with client
 
-  let { initialCount: counter, targetCount } = req.body;
+  let { initialCount: counter, targetCount } = req.body as RequestPayload;
 
   let interValID = setInterval(() => {
     counter++;

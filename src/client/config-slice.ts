@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { RequestPayload } from "./common/request-payload.js";
+import { RequestPayload } from "../common/request-payload.js";
 
 interface ConfigState {
   someAPIConfig: RequestPayload;

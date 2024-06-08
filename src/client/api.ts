@@ -1,17 +1,18 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query";
 import { fetchEventSource } from "@microsoft/fetch-event-source";
-import type { ResponsePayload } from "./common/response-payload.js";
-import type { RequestPayload } from "./common/request-payload.js";
-import { Engine, State } from "./engine.js";
+import type { ResponsePayload } from "../common/response-payload.js";
+import type { RequestPayload } from "../common/request-payload.js";
+import { State } from "./engine.js";
 import { selectAPIConfig } from "./config-slice.js";
 
+const InitialState = { data: { data: "", messageId: "" } };
 // Define your API endpoints
 export const api = createApi({
   reducerPath: "knowledgeApi",
   baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:5000" }), // Replace '/api' with your API base URL
   endpoints: (builder) => ({
     getAnswer: builder.query<ResponsePayload, RequestPayload>({
-      queryFn: () => ({ data: { data: "", messageId: "" } }),
+      queryFn: () => InitialState,
       async onCacheEntryAdded(arg, { updateCachedData, cacheDataLoaded }) {
         await cacheDataLoaded;
         await fetchEventSource(`http://localhost:5000/sse/`, {
@@ -35,5 +36,5 @@ export const api = createApi({
 
 const selectAnswerRTKQ = api.endpoints.getAnswer.select;
 export const selectAnswer = (state: State) =>
-  selectAnswerRTKQ(selectAPIConfig(state))(state).data;
-export const { initiate: fetchAnswer } = api.endpoints.getAnswer
+  selectAnswerRTKQ(selectAPIConfig(state))(state).data ?? InitialState.data;
+export const { initiate: fetchAnswer } = api.endpoints.getAnswer;

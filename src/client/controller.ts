@@ -1,5 +1,5 @@
 import { fetchAnswer, selectAnswer } from "./api.js";
-import { RequestPayload } from "./common/request-payload.js";
+import { RequestPayload } from "../common/request-payload.js";
 import { selectAPIConfig, updateCountRequestData } from "./config-slice.js";
 import { Engine } from "./engine.js";
 
